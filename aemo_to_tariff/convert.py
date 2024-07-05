@@ -7,7 +7,7 @@ from aemo_to_tariff.evoenergy import convert as evoenergy_convert
 def spot_to_tariff(interval_time, network, tariff, rrp, dlf=1.05905, mlf=1.0154):
     """
     Convert spot price from $/MWh to c/kWh for a given network and tariff.
-    
+
     Parameters:
     - interval_time (str): The interval time.
     - network (str): The name of the network (e.g., 'Energex', 'Ausgrid', 'Evoenergy').
@@ -15,7 +15,7 @@ def spot_to_tariff(interval_time, network, tariff, rrp, dlf=1.05905, mlf=1.0154)
     - rrp (float): The Regional Reference Price in $/MWh.
     - dlf (float): The Distribution Loss Factor.
     - mlf (float): The Metering Loss Factor.
-    
+
     Returns:
     - float: The price in c/kWh.
     """

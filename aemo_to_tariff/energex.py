@@ -5,8 +5,6 @@ from pytz import timezone
 def time_zone():
     return 'Australia/Brisbane'
 
-NOUS = (0.02840, 0.15936, 0.03513)
-
 def daily():
     return 32.757 + 15.500
 
@@ -34,12 +32,12 @@ def shoulder_cost():
 def convert(interval_time: datetime, tariff: str, rrp: float):
     """
     Convert RRP from $/MWh to c/kWh for Evoenergy.
-    
+
     Parameters:
     - interval_time (str): The interval time.
     - tariff (str): The tariff code.
     - rrp (float): The Regional Reference Price in $/MWh.
-    
+
     Returns:
     - float: The price in c/kWh.
     """
@@ -61,5 +59,5 @@ def convert(interval_time: datetime, tariff: str, rrp: float):
         slope = 1.037869032618134
         intecept = 5.586606750833143
         return rrp_c_kwh * slope + intecept
-    
+
     return price_c_kwh + rrp_c_kwh

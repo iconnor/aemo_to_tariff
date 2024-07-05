@@ -32,12 +32,12 @@ def off_peak_cost():
 def convert(interval_time: datetime, tariff: str, rrp: float):
     """
     Convert RRP from $/MWh to c/kWh for Evoenergy.
-    
+
     Parameters:
     - interval_time (str): The interval time.
     - tariff (str): The tariff code.
     - rrp (float): The Regional Reference Price in $/MWh.
-    
+
     Returns:
     - float: The price in c/kWh.
     """
@@ -58,4 +58,4 @@ def convert(interval_time: datetime, tariff: str, rrp: float):
         # Terrible approximation
         slope = 1.037869032618134
         intecept = 5.586606750833143
-        return rrp_c_kwh * slope + intecept    
+        return rrp_c_kwh * slope + intecept

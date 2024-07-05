@@ -8,13 +8,13 @@ def time_zone():
 def convert(interval_time: datetime, tariff: str, rrp: float):
     """
     Convert RRP from $/MWh to c/kWh for Ausgrid.
-    
+
     Parameters:
     - interval_time (str): The interval time.
     - network (str): The name of the network.
     - tariff (str): The tariff code.
     - rrp (float): The Regional Reference Price in $/MWh.
-    
+
     Returns:
     - float: The price in c/kWh.
     """
