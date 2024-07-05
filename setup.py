@@ -10,7 +10,9 @@ setup(
     author_email='ian@powston.com',
     license='MIT',
     packages=find_packages(),
-    install_requires=[],
+    install_requires=[
+        'pytz',
+    ],
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',

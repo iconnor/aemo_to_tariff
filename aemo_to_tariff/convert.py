@@ -20,11 +20,12 @@ def spot_to_tariff(interval_time, network, tariff, rrp, dlf=1.05905, mlf=1.0154)
     - float: The price in c/kWh.
     """
     adjusted_rrp = rrp * dlf * mlf
-    if network == 'Energex':
+    network = network.lower()
+    if network == 'energex':
         return energex_convert(interval_time, tariff, adjusted_rrp)
-    elif network == 'Ausgrid':
+    elif network == 'ausgrid':
         return ausgrid_convert(interval_time, tariff, adjusted_rrp)
-    elif network == 'Evoenergy':
+    elif network == 'evoenergy':
         return evoenergy_convert(interval_time, tariff, adjusted_rrp)
     else:
         raise ValueError(f"Unknown network: {network}")
