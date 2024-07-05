@@ -1,61 +1,85 @@
 # aemo_to_tariff/evoenergy.py
 from datetime import datetime
 from pytz import timezone
+from datetime import time
 
 def time_zone():
     return 'Australia/ACT'
 
-def daily():
-    return 32.757 + 15.500
+tariffs = {
+        '015': {
+            'name': 'Residential TOU Network (closed)',
+            'periods': [
+                ('Peak', time(7, 0), time(9, 0), 14.063),
+                ('Peak', time(17, 0), time(20, 0), 14.063),
+                ('Shoulder', time(9, 0), time(17, 0), 6.285),
+                ('Shoulder', time(20, 0), time(22, 0), 6.285),
+                ('Off-peak', time(22, 0), time(7, 0), 3.210)
+            ]
+        },
+        '016': {
+            'name': 'Residential TOU Network (closed) XMC',
+            'periods': [
+                ('Peak', time(7, 0), time(9, 0), 14.063),
+                ('Peak', time(17, 0), time(20, 0), 14.063),
+                ('Shoulder', time(9, 0), time(17, 0), 6.285),
+                ('Shoulder', time(20, 0), time(22, 0), 6.285),
+                ('Off-peak', time(22, 0), time(7, 0), 3.210)
+            ]
+        },
+        '017': {
+            'name': 'New Residential TOU Network',
+            'periods': [
+                ('Peak', time(7, 0), time(9, 0), 14.109),
+                ('Peak', time(17, 0), time(21, 0), 14.109),
+                ('Solar Soak', time(11, 0), time(15, 0), 1.757),
+                ('Off-peak', time(21, 0), time(7, 0), 3.918),
+                ('Off-peak', time(9, 0), time(11, 0), 3.918),
+                ('Off-peak', time(15, 0), time(17, 0), 3.918)
+            ]
+        },
+        '018': {
+            'name': 'New Residential TOU Network XMC',
+            'periods': [
+                ('Peak', time(7, 0), time(9, 0), 14.109),
+                ('Peak', time(17, 0), time(21, 0), 14.109),
+                ('Solar Soak', time(11, 0), time(15, 0), 1.757),
+                ('Off-peak', time(21, 0), time(7, 0), 3.918),
+                ('Off-peak', time(9, 0), time(11, 0), 3.918),
+                ('Off-peak', time(15, 0), time(17, 0), 3.918)
+            ]
+        }
+    }
 
-def peak_hours():
-    # Peak Energy 7am-9am and 5pm-9pm every day
-    return [7, 8, 17, 18, 19, 20]
-
-def peak_cost():
-    return 14.109
-
-def solar_soak_hours():
-    # Solar Soak Energy 11am-3pm every day
-    return [11, 12, 13, 14]
-
-def solar_soak_cost():
-    return 1.757
-
-def off_peak_hours():
-    # Off-peak Energy 9pm-7am, 9am-11am and 3pm-5pm every day
-    return [21, 22, 23, 9, 10, 15, 16]
-
-def off_peak_cost():
-    return 3.918
-
-def convert(interval_time: datetime, tariff: str, rrp: float):
+def convert(interval_datetime: datetime, tariff_code: str, rrp: float):
     """
     Convert RRP from $/MWh to c/kWh for Evoenergy.
-
+    
     Parameters:
     - interval_time (str): The interval time.
     - tariff (str): The tariff code.
     - rrp (float): The Regional Reference Price in $/MWh.
-
+    
     Returns:
     - float: The price in c/kWh.
     """
-    interval_time = interval_time.astimezone(timezone(time_zone()))
-    hour = interval_time.hour
+    interval_time = interval_datetime.astimezone(timezone(time_zone())).time()
+    
     rrp_c_kwh = rrp / 10
-    if tariff == '017':
-        if hour in peak_hours():
-            price_c_kwh = peak_cost()
-        elif hour in solar_soak_hours():
-            price_c_kwh = solar_soak_cost()
-        elif hour in off_peak_hours():
-            price_c_kwh = off_peak_cost()
-        else:
-            price_c_kwh = off_peak_cost()
-        return price_c_kwh + rrp_c_kwh
-    else:
-        # Terrible approximation
-        slope = 1.037869032618134
-        intecept = 5.586606750833143
-        return rrp_c_kwh * slope + intecept
+    tariff = tariffs[tariff_code]
+    
+    # Find the applicable period and rate
+    for period, start, end, rate in tariff['periods']:
+        if start <= interval_time < end:
+            total_price = rrp_c_kwh + rate
+            return total_price
+        
+        # Handle overnight periods (e.g., 22:00 to 07:00)
+        if start > end and (interval_time >= start or interval_time < end):
+            total_price = rrp_c_kwh + rate
+            return total_price
+
+    # Otherwise, this terrible approximation
+    slope = 1.037869032618134
+    intecept = 5.586606750833143
+    return rrp_c_kwh * slope + intecept    

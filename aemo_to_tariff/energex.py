@@ -1,63 +1,84 @@
 # aemo_to_tariff/energex.py
-from datetime import datetime
+from datetime import time, datetime
 from pytz import timezone
 
 def time_zone():
     return 'Australia/Brisbane'
+from datetime import time, datetime
 
-def daily():
-    return 32.757 + 15.500
+tariffs = {
+        '8400': {
+            'name': 'Residential Flat',
+            'periods': [
+                ('Anytime', time(0, 0), time(23, 59), 9.648)
+            ]
+        },
+        '3900': {
+            'name': 'Residential Transitional Demand',
+            'periods': [
+                ('Anytime', time(0, 0), time(23, 59), 4.085)
+            ]
+        },
+        '3700': {
+            'name': 'Residential Demand',
+            'periods': [
+                ('Anytime', time(0, 0), time(23, 59), 3.320)
+            ]
+        },
+        '6900': {
+            'name': 'Residential Time of Use Energy',
+            'periods': [
+                ('Evening', time(16, 0), time(21, 0), 17.861),
+                ('Overnight', time(21, 0), time(9, 0), 6.268),
+                ('Day', time(9, 0), time(16, 0), 4.066)
+            ]
+        },
+        '9100': {
+            'name': 'Economy (Secondary)',
+            'periods': [
+                ('Anytime', time(0, 0), time(23, 59), 5.564)
+            ]
+        },
+        '9000': {
+            'name': 'Super Economy (Secondary)',
+            'periods': [
+                ('Anytime', time(0, 0), time(23, 59), 4.463)
+            ]
+        }
+    }
 
-def peak_hours():
-    # Peak Energy 4pm-9pm every day
-    return [16, 17, 18, 19, 20]
 
-def peak_cost():
-    return 15.936
 
-def off_peak_hours():
-    # Off-peak Energy 9pm-4pm every day
-    return [10, 11, 12, 13, 14, 15]
-
-def off_peak_cost():
-    return 2.840
-
-def shoulder_hours():
-    # Not peak or off-peak
-    return [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-def shoulder_cost():
-    return 3.513
-
-def convert(interval_time: datetime, tariff: str, rrp: float):
+def convert(interval_datetime: datetime, tariff_code: str, rrp: float):
     """
-    Convert RRP from $/MWh to c/kWh for Evoenergy.
-
+    Convert RRP from $/MWh to c/kWh for Energex.
+    
     Parameters:
     - interval_time (str): The interval time.
     - tariff (str): The tariff code.
     - rrp (float): The Regional Reference Price in $/MWh.
-
+    
     Returns:
     - float: The price in c/kWh.
     """
-    interval_time = interval_time.astimezone(timezone(time_zone()))
-    hour = interval_time.hour
+    interval_time = interval_datetime.astimezone(timezone(time_zone())).time()
     rrp_c_kwh = rrp / 10
-    if tariff == '6970':
-        if hour in peak_hours():
-            price_c_kwh = peak_cost()
-        elif hour in shoulder_hours():
-            price_c_kwh = shoulder_cost()
-        elif hour in off_peak_hours():
-            price_c_kwh = off_peak_cost()
-        else:
-            price_c_kwh = off_peak_cost()
-        price_c_kwh += rrp_c_kwh
-    else:
-        # Terrible approximation
-        slope = 1.037869032618134
-        intecept = 5.586606750833143
-        return rrp_c_kwh * slope + intecept
 
-    return price_c_kwh + rrp_c_kwh
+    tariff_code = str(tariff_code)[:2] + '00'
+    tariff = tariffs[tariff_code]
+    
+    # Find the applicable period and rate
+    for period, start, end, rate in tariff['periods']:
+        if start <= interval_time < end:
+            total_price = rrp_c_kwh + rate
+            return total_price
+        
+        # Handle overnight periods
+        if start > end and (interval_time >= start or interval_time < end):
+            total_price = rrp_c_kwh + rate
+            return total_price
+    
+    # Terrible approximation
+    slope = 1.037869032618134
+    intecept = 5.586606750833143
+    return rrp_c_kwh * slope + intecept
