@@ -4,7 +4,9 @@ from aemo_to_tariff.energex import convert as energex_convert
 from aemo_to_tariff.ausgrid import convert as ausgrid_convert
 from aemo_to_tariff.evoenergy import convert as evoenergy_convert
 
-def spot_to_tariff(interval_time, network, tariff, rrp, dlf=1.05905, mlf=1.0154):
+def spot_to_tariff(interval_time, network, tariff, rrp,
+                   dlf=1.05905, mlf=1.0154,
+                   market=1.0154):
     """
     Convert spot price from $/MWh to c/kWh for a given network and tariff.
 
