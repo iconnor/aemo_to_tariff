@@ -69,5 +69,23 @@ class TestTariffConversions(unittest.TestCase):
         # Placeholder test - update when Evoenergy is implemented
         self.assertEqual(calculate_demand_fee('Evoenergy', '017', 5.5, 31), 0.0)
 
+    def test_sapn_daily_fee(self):
+        self.assertAlmostEqual(get_daily_fee('SAPN', 'RTOU'), 0.5753, 4)
+        self.assertAlmostEqual(get_daily_fee('SAPN', 'SBTOU'), 0.7259, 4)
+
+    def test_sapn_demand_fee(self):
+        self.assertAlmostEqual(calculate_demand_fee('SAPN', 'RTOU', 5.5, 31), 0, 4)
+        self.assertAlmostEqual(calculate_demand_fee('SAPN', 'SBTOU', 5.5, 31), 0, 4)
+
+    def test_sapn_tariff_RTOU(self):
+        # Peak
+        interval_time = datetime.strptime('2024-07-05 18:00+09:30', '%Y-%m-%d %H:%M%z')
+        self.assertAlmostEqual(spot_to_tariff(interval_time, 'SAPN', 'RTOU', 100), 11.11, 2)
+
+        # Off-peak
+        interval_time = datetime.strptime('2024-07-05 02:00+09:30', '%Y-%m-%d %H:%M%z')
+        self.assertAlmostEqual(spot_to_tariff(interval_time, 'SAPN', 'RTOU', 100), 10.99, 2)
+
+
 if __name__ == '__main__':
     unittest.main()

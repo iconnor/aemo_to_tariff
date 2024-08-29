@@ -1,12 +1,9 @@
 # aemo_to_tariff/convert.py
 
-from aemo_to_tariff.energex import (
-    convert as energex_convert,
-    get_daily_fee as energex_daily_fee,
-    calculate_demand_fee as energex_demand_fee
-)
-from aemo_to_tariff.ausgrid import convert as ausgrid_convert
-from aemo_to_tariff.evoenergy import convert as evoenergy_convert
+import aemo_to_tariff.energex as energex
+import aemo_to_tariff.ausgrid as ausgrid
+import aemo_to_tariff.evoenergy as evoenergy
+import aemo_to_tariff.sapower as sapower
 
 def spot_to_tariff(interval_time, network, tariff, rrp,
                    dlf=1.05905, mlf=1.0154, market=1.0154):
@@ -29,11 +26,13 @@ def spot_to_tariff(interval_time, network, tariff, rrp,
     network = network.lower()
 
     if network == 'energex':
-        return energex_convert(interval_time, tariff, adjusted_rrp)
+        return energex.convert(interval_time, tariff, adjusted_rrp)
     elif network == 'ausgrid':
-        return ausgrid_convert(interval_time, tariff, adjusted_rrp)
+        return ausgrid.convert(interval_time, tariff, adjusted_rrp)
     elif network == 'evoenergy':
-        return evoenergy_convert(interval_time, tariff, adjusted_rrp)
+        return evoenergy.convert(interval_time, tariff, adjusted_rrp)
+    elif network == 'sapn':
+        return sapower.convert(interval_time, tariff, adjusted_rrp)
     else:
         raise ValueError(f"Unknown network: {network}")
 
@@ -52,13 +51,15 @@ def get_daily_fee(network, tariff, annual_usage=None):
     network = network.lower()
 
     if network == 'energex':
-        return energex_daily_fee(tariff, annual_usage)
+        return energex.get_daily_fee(tariff, annual_usage)
     elif network == 'ausgrid':
         # Placeholder for Ausgrid daily fee calculation
         return 0.0
     elif network == 'evoenergy':
         # Placeholder for Evoenergy daily fee calculation
         return 0.0
+    elif network == 'sapn':
+        return sapower.get_daily_fee(tariff)
     else:
         raise ValueError(f"Unknown network: {network}")
 
@@ -78,12 +79,14 @@ def calculate_demand_fee(network, tariff, demand_kw, days=30):
     network = network.lower()
 
     if network == 'energex':
-        return energex_demand_fee(tariff, demand_kw, days)
+        return energex.calculate_demand_fee(tariff, demand_kw, days)
     elif network == 'ausgrid':
         # Placeholder for Ausgrid demand fee calculation
         return 0.0
     elif network == 'evoenergy':
         # Placeholder for Evoenergy demand fee calculation
         return 0.0
+    elif network == 'sapn':
+        return sapower.calculate_demand_fee(tariff, demand_kw, days)
     else:
         raise ValueError(f"Unknown network: {network}")

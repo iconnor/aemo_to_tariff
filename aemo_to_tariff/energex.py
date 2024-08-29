@@ -30,7 +30,7 @@ daily_fees = {
     '6600': 5.273,  # Large Residential Energy
     '6700': 5.273,  # Large Business Energy
     '7200': 4.994,  # LV Demand Time-of-Use
-    '8100': 37.740, # Demand Large
+    '8100': 37.740,  # Demand Large
     '8300': 5.273,  # Demand Small
 }
 
