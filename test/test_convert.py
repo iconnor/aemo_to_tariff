@@ -86,6 +86,23 @@ class TestTariffConversions(unittest.TestCase):
         interval_time = datetime.strptime('2024-07-05 02:00+09:30', '%Y-%m-%d %H:%M%z')
         self.assertAlmostEqual(spot_to_tariff(interval_time, 'SAPN', 'RTOU', 100), 10.99, 2)
 
+    def test_auroraenergy_daily_fee(self):
+        self.assertAlmostEqual(get_daily_fee('AuroraEnergy', '93'), 134.98, 2)
+        self.assertAlmostEqual(get_daily_fee('AuroraEnergy', '94'), 135.82, 2)
+
+    def test_auroraenergy_demand_fee(self):
+        self.assertAlmostEqual(calculate_demand_fee('AuroraEnergy', '75', 5.5, 31), 0.0, 2)
+        self.assertAlmostEqual(calculate_demand_fee('AuroraEnergy', '31', 5.5, 31), 0.0, 2)
+
+    def test_auroraenergy_tariff_93(self):
+        # Peak
+        interval_time = datetime.strptime('2024-07-05 18:00+09:30', '%Y-%m-%d %H:%M%z')
+        self.assertAlmostEqual(spot_to_tariff(interval_time, 'AuroraEnergy', '93', 100), 46.756, 2)
+
+        # Off-peak
+        interval_time = datetime.strptime('2024-07-05 02:00+09:30', '%Y-%m-%d %H:%M%z')
+        self.assertAlmostEqual(spot_to_tariff(interval_time, 'AuroraEnergy', '93', 100), 27.61, 2)
+
 
 if __name__ == '__main__':
     unittest.main()

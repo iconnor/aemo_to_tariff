@@ -82,5 +82,5 @@ def convert(interval_datetime: datetime, tariff_code: str, rrp: float):
 
     # Otherwise, this terrible approximation
     slope = 1.037869032618134
-    intecept = 5.586606750833143
-    return rrp_c_kwh * slope + intecept
+    intercept = 5.586606750833143
+    return rrp_c_kwh * slope + intercept

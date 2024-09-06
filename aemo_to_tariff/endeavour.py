@@ -51,7 +51,7 @@ tariffs = {
 
 def convert(interval_time: datetime, tariff_code: str, rrp: float):
     """
-    Convert RRP from $/MWh to c/kWh for Evoenergy.
+    Convert RRP from $/MWh to c/kWh for endeavour.
 
     Parameters:
     - interval_time (str): The interval time.
