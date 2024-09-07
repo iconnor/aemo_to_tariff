@@ -4,6 +4,7 @@ import aemo_to_tariff.energex as energex
 import aemo_to_tariff.ausgrid as ausgrid
 import aemo_to_tariff.evoenergy as evoenergy
 import aemo_to_tariff.sapower as sapower
+import aemo_to_tariff.auroraenergy as auroraenergy
 
 def spot_to_tariff(interval_time, network, tariff, rrp,
                    dlf=1.05905, mlf=1.0154, market=1.0154):
@@ -33,6 +34,8 @@ def spot_to_tariff(interval_time, network, tariff, rrp,
         return evoenergy.convert(interval_time, tariff, adjusted_rrp)
     elif network == 'sapn':
         return sapower.convert(interval_time, tariff, adjusted_rrp)
+    elif network == 'auroraenergy':
+        return auroraenergy.convert(interval_time, tariff, adjusted_rrp)
     else:
         raise ValueError(f"Unknown network: {network}")
 
@@ -60,6 +63,8 @@ def get_daily_fee(network, tariff, annual_usage=None):
         return 0.0
     elif network == 'sapn':
         return sapower.get_daily_fee(tariff)
+    elif network == 'auroraenergy':
+        return auroraenergy.get_daily_fee(tariff)
     else:
         raise ValueError(f"Unknown network: {network}")
 
@@ -88,5 +93,7 @@ def calculate_demand_fee(network, tariff, demand_kw, days=30):
         return 0.0
     elif network == 'sapn':
         return sapower.calculate_demand_fee(tariff, demand_kw, days)
+    elif network == 'auroraenergy':
+        return auroraenergy.calculate_demand_fee(tariff, demand_kw, days)
     else:
         raise ValueError(f"Unknown network: {network}")
