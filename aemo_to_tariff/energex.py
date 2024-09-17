@@ -11,6 +11,7 @@ daily_fees = {
     '3900': 0.556,  # Residential Transitional Demand
     '3700': 0.556,  # Residential Demand
     '6900': 0.556,  # Residential Time of Use Energy
+    '8500': 0.739,  # Small Business Flat
     '3600': 0.739,  # Small Business Demand
     '3800': 0.739,  # Small Business Transitional Demand
     '6000': {        # Small Business Wide IFT
@@ -85,6 +86,13 @@ tariffs = {
             ('Anytime', time(0, 0), time(23, 59), 10.359)
         ],
         'rate': 10.359
+    },
+    '8500': {
+        'name': 'Small Business Flat',
+        'periods': [
+            ('Anytime', time(0, 0), time(23, 59), 10.359)
+        ],
+        'rate': 10.195
     },
     '6800': {
         'name': 'Small Business ToU Energy',
