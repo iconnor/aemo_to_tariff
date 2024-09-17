@@ -1,0 +1,10 @@
+{
+    "domain": "aemo_to_tariff",
+    "name": "AEMO to Tariff Converter",
+    "documentation": "https://github.com/powston/aemo_to_tariff",
+    "dependencies": [],
+    "codeowners": ["@powston"],
+    "requirements": ["aemo_to_tariff"],
+    "version": "0.1.0",
+    "config_flow": false
+  }

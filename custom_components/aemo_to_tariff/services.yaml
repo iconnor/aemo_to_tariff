@@ -1,0 +1,53 @@
+convert_spot_to_tariff:
+  description: Convert AEMO spot price to retail tariff
+  fields:
+    interval_time:
+      description: The interval time
+      example: "2023-07-01 12:00:00"
+    network:
+      description: The network name
+      example: "energex"
+    tariff:
+      description: The tariff code
+      example: "8400"
+    rrp:
+      description: The Regional Reference Price in $/MWh
+      example: 100.50
+    dlf:
+      description: The Distribution Loss Factor
+      example: 1.05905
+    mlf:
+      description: The Metering Loss Factor
+      example: 1.0154
+    market:
+      description: The market factor
+      example: 1.0154
+
+get_tariff_daily_fee:
+  description: Get the daily fee for a tariff
+  fields:
+    network:
+      description: The network name
+      example: "energex"
+    tariff:
+      description: The tariff code
+      example: "8400"
+    annual_usage:
+      description: Annual usage in kWh (optional)
+      example: 5000
+
+get_tariff_demand_fee:
+  description: Calculate the demand fee for a tariff
+  fields:
+    network:
+      description: The network name
+      example: "energex"
+    tariff:
+      description: The tariff code
+      example: "8400"
+    demand_kw:
+      description: The maximum demand in kW
+      example: 5.5
+    days:
+      description: The number of days for the billing period
+      example: 30

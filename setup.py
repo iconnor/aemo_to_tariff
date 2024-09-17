@@ -9,7 +9,7 @@ setup(
     author='Ian Connor',
     author_email='ian@powston.com',
     license='MIT',
-    packages=find_packages(),
+    packages=find_packages(exclude=["custom_components", "custom_components.*"]),
     install_requires=[
         'pytz',
     ],
