@@ -10,61 +10,61 @@ tariffs = {
     'RSR': {
         'name': 'Residential Single Rate',
         'periods': [
-            ('Anytime', time(0, 0), time(23, 59), 0.1504)
+            ('Anytime', time(0, 0), time(23, 59), 15.04)
         ]
     },
     'RTOU': {
         'name': 'Residential Time of Use',
         'periods': [
-            ('Peak', time(14, 0), time(20, 0), 0.1879),
-            ('Off-peak', time(20, 0), time(14, 0), 0.0756),
-            ('Solar Sponge', time(10, 0), time(15, 0), 0.0381)
+            ('Peak', time(14, 0), time(20, 0), 18.79),
+            ('Off-peak', time(20, 0), time(14, 0), 7.56),
+            ('Solar Sponge', time(10, 0), time(15, 0), 3.81)
         ]
     },
     'RPRO': {
         'name': 'Residential Prosumer',
         'periods': [
-            ('Peak', time(14, 0), time(20, 0), 0.1879),
-            ('Off-peak', time(20, 0), time(14, 0), 0.0756),
-            ('Solar Sponge', time(10, 0), time(15, 0), 0.0381)
+            ('Peak', time(14, 0), time(20, 0), 18.79),
+            ('Off-peak', time(20, 0), time(14, 0), 7.56),
+            ('Solar Sponge', time(10, 0), time(15, 0), 3.81)
         ]
     },
     'RELE': {
         'name': 'Residential Electrify',
         'periods': [
-            ('Peak', time(14, 0), time(20, 0), 0.3309),
-            ('Off-peak', time(20, 0), time(14, 0), 0.0978),
-            ('Solar Sponge', time(10, 0), time(15, 0), 0.0301)
+            ('Peak', time(14, 0), time(20, 0), 33.09),
+            ('Off-peak', time(20, 0), time(14, 0), 9.78),
+            ('Solar Sponge', time(10, 0), time(15, 0), 3.01)
         ]
     },
     'SBTOU': {
         'name': 'Small Business Time of Use',
         'periods': [
-            ('Peak', time(7, 0), time(21, 0), 0.2568),
-            ('Off-peak', time(21, 0), time(7, 0), 0.0969)
+            ('Peak', time(7, 0), time(21, 0), 25.68),
+            ('Off-peak', time(21, 0), time(7, 0), 9.69)
         ]
     },
     'SBTOUE': {
         'name': 'Small Business Time of Use Electrify',
         'periods': [
-            ('Peak', time(7, 0), time(21, 0), 0.3257),
-            ('Off-peak', time(21, 0), time(7, 0), 0.0960)
+            ('Peak', time(7, 0), time(21, 0), 32.57),
+            ('Off-peak', time(21, 0), time(7, 0), 9.60)
         ]
     }
 }
 
 daily_fees = {
-    'RSR': 0.5753,
-    'RTOU': 0.5753,
-    'RPRO': 0.5753,
-    'RELE': 0.5753,
-    'SBTOU': 0.7259,
-    'SBTOUE': 0.7259
+    'RSR': 57.53,
+    'RTOU': 57.53,
+    'RPRO': 57.53,
+    'RELE': 57.53,
+    'SBTOU': 72.59,
+    'SBTOUE': 72.59
 }
 
 demand_charges = {
-    'RPRO': 0.8339,  # $/kW/day
-    'SBTOUD': 0.0842  # $/kW/day
+    'RPRO': 83.39,  # $/kW/day
+    'SBTOUD': 8.42  # $/kW/day
 }
 
 def convert(interval_datetime: datetime, tariff_code: str, rrp: float):

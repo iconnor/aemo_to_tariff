@@ -13,7 +13,7 @@ pip install aemo_to_tariff
 ```python
 from aemo_to_tariff import spot_to_tariff
 
-price_c_kwh = spot_to_tariff('2024-07-05 14:00', 'Energex', '6970', 100)
+price_c_kwh = spot_to_tariff('2024-07-05 14:00', 'Energex', '6900', 100)
 print(price_c_kwh)
 ```
 
@@ -83,7 +83,7 @@ service: aemo_to_tariff.convert_spot_to_tariff
 data:
   interval_time: "{{ now().isoformat() }}"
   network: "energex"
-  tariff: "6970"
+  tariff: "6900"
   rrp: "{{ states('sensor.your_spot_price_sensor') }}"
 ```
 

@@ -8,7 +8,7 @@ DOMAIN = "aemo_to_tariff"
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Set up the AEMO to Tariff component."""
-    
+
     def convert_spot_to_tariff(interval_time, network, tariff, rrp, dlf=1.05905, mlf=1.0154, market=1.0154):
         return spot_to_tariff(interval_time, network, tariff, rrp, dlf, mlf, market)
 
