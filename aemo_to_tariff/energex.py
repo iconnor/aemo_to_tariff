@@ -207,6 +207,14 @@ def get_daily_fee(tariff_code: str, annual_usage: float = None):
 
     return fee
 
+
+def get_periods(tariff_code: str):
+    tariff = tariffs.get(tariff_code)
+    if not tariff:
+        raise ValueError(f"Unknown tariff code: {tariff_code}")
+
+    return tariff['periods']
+
 def convert(interval_datetime: datetime, tariff_code: str, rrp: float):
     """
     Convert RRP from $/MWh to c/kWh for Energex.

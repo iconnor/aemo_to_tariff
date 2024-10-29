@@ -5,6 +5,7 @@ from pytz import timezone
 def time_zone():
     return 'Australia/Hobart'
 
+
 tariffs = {
     'TAS93': {
         'name': 'Residential time of use consumption',
@@ -87,6 +88,14 @@ daily_fees = {
     'TAS89': 619.613,
     'TAS82': 439.841,
 }
+
+
+def get_periods(tariff_code: str):
+    tariff = tariffs.get(tariff_code)
+    if not tariff:
+        raise ValueError(f"Unknown tariff code: {tariff_code}")
+
+    return tariff['periods']
 
 def convert(interval_datetime: datetime, tariff_code: str, rrp: float):
     """

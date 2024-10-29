@@ -97,3 +97,30 @@ def calculate_demand_fee(network, tariff, demand_kw, days=30):
         return tasnetworks.calculate_demand_fee(tariff, demand_kw, days)
     else:
         raise ValueError(f"Unknown network: {network}")
+
+
+def get_periods(network, tariff: str):
+    """
+    Get the periods for a given network and tariff.
+    
+    Parameter:
+    - network (str): The name of the network (e.g., 'Energex', 'Ausgrid', 'Evoenergy').
+    - tariff (str): The tariff code.
+    
+    Returns:
+    - list: A list of periods for the given tariff.
+    """
+    network = network.lower()
+
+    if network == 'energex':
+        return energex.get_periods(tariff)
+    elif network == 'ausgrid':
+        return ausgrid.get_periods(tariff)
+    elif network == 'evoenergy':
+        return evoenergy.get_periods(tariff)
+    elif network == 'sapn':
+        return sapower.get_periods(tariff)
+    elif network == 'tasnetworks':
+        return tasnetworks.get_periods(tariff)
+    else:
+        raise ValueError(f"Unknown network: {network}")
