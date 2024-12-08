@@ -83,20 +83,20 @@ def convert(interval_datetime: datetime, tariff_code: str, rrp: float):
             if 'season' in tariff['name'].lower():
                 if is_high_season and 'high' in period.lower():
                     total_price = rrp_c_kwh + rate
-                    return total_price, f"{tariff['name']} - {period}"
+                    return total_price
                 elif 'low' in period.lower() and not is_high_season:
                     total_price = rrp_c_kwh + rate
-                    return total_price, f"{tariff['name']} - {period}"
+                    return total_price
                 elif 'off' in period.lower():
                     total_price = rrp_c_kwh + rate
-                    return total_price, f"{tariff['name']} - {period}"
+                    return total_price
                 else:
                     continue
             else:
                 total_price = rrp_c_kwh + rate
-                return total_price, f"{tariff['name']} - {period}"
+                return total_price
 
     # Otherwise, this terrible approximation
     slope = 1.037869032618134
     intecept = 5.586606750833143
-    return rrp_c_kwh * slope + intecept, 'Unknown tariff'
+    return rrp_c_kwh * slope + intecept
