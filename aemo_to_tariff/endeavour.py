@@ -39,7 +39,7 @@ tariffs = {
         ]
     },
     'N19': {
-        'name': 'LV STOU Demand',
+        'name': 'LV Seasonal STOU Demand',
         'periods': [
             ('High-season Peak', time(16, 0), time(20, 0), 4.2883),
             ('Low-season Peak', time(16, 0), time(20, 0), 3.6717),
@@ -57,34 +57,41 @@ def get_periods(tariff_code: str):
 
     return tariff['periods']
 
-def convert(interval_time: datetime, tariff_code: str, rrp: float):
+def convert(interval_datetime: datetime, tariff_code: str, rrp: float):
     """
     Convert RRP from $/MWh to c/kWh for endeavour.
 
     Parameters:
-    - interval_time (str): The interval time.
+    - interval_datetime (datetime): The interval time.
     - tariff (str): The tariff code.
     - rrp (float): The Regional Reference Price in $/MWh.
 
     Returns:
     - float: The price in c/kWh.
     """
-    interval_time = interval_time.astimezone(timezone(time_zone()))
+    interval_time = interval_datetime.astimezone(timezone(time_zone())).time()
     rrp_c_kwh = rrp / 10
     tariff = tariffs[tariff_code]
 
     # Determine if it's high season (November to March) or low season (April to October)
-    current_month = datetime.now().month
+    current_month = interval_datetime.month
     is_high_season = current_month in [11, 12, 1, 2, 3]
 
     # Find the applicable period and rate
     for period, start, end, rate in tariff['periods']:
         if start <= interval_time < end:
-            if 'season' in period.lower():
-                if (is_high_season and 'high-season' in period.lower()) or \
-                   (not is_high_season and 'low-season' in period.lower()):
+            if 'season' in tariff['name'].lower():
+                if is_high_season and 'high' in period.lower():
                     total_price = rrp_c_kwh + rate
                     return total_price, f"{tariff['name']} - {period}"
+                elif 'low' in period.lower() and not is_high_season:
+                    total_price = rrp_c_kwh + rate
+                    return total_price, f"{tariff['name']} - {period}"
+                elif 'off' in period.lower():
+                    total_price = rrp_c_kwh + rate
+                    return total_price, f"{tariff['name']} - {period}"
+                else:
+                    continue
             else:
                 total_price = rrp_c_kwh + rate
                 return total_price, f"{tariff['name']} - {period}"
@@ -92,4 +99,4 @@ def convert(interval_time: datetime, tariff_code: str, rrp: float):
     # Otherwise, this terrible approximation
     slope = 1.037869032618134
     intecept = 5.586606750833143
-    return rrp_c_kwh * slope + intecept
+    return rrp_c_kwh * slope + intecept, 'Unknown tariff'

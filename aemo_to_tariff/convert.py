@@ -5,6 +5,7 @@ import aemo_to_tariff.ausgrid as ausgrid
 import aemo_to_tariff.evoenergy as evoenergy
 import aemo_to_tariff.sapower as sapower
 import aemo_to_tariff.tasnetworks as tasnetworks
+import aemo_to_tariff.endeavour as endeavour
 
 def spot_to_tariff(interval_time, network, tariff, rrp,
                    dlf=1.05905, mlf=1.0154, market=1.0154):
@@ -36,6 +37,8 @@ def spot_to_tariff(interval_time, network, tariff, rrp,
         return sapower.convert(interval_time, tariff, adjusted_rrp)
     elif network == 'tasnetworks':
         return tasnetworks.convert(interval_time, tariff, adjusted_rrp)
+    elif network == 'endeavour':
+        return endeavour.convert(interval_time, tariff, adjusted_rrp)
     else:
         raise ValueError(f"Unknown network: {network}")
 
@@ -95,6 +98,8 @@ def calculate_demand_fee(network, tariff, demand_kw, days=30):
         return sapower.calculate_demand_fee(tariff, demand_kw, days)
     elif network == 'tasnetworks':
         return tasnetworks.calculate_demand_fee(tariff, demand_kw, days)
+    elif network == 'endeavour':
+        return endeavour.calculate_demand_fee(tariff, demand_kw, days)
     else:
         raise ValueError(f"Unknown network: {network}")
 
@@ -122,5 +127,7 @@ def get_periods(network, tariff: str):
         return sapower.get_periods(tariff)
     elif network == 'tasnetworks':
         return tasnetworks.get_periods(tariff)
+    elif network == 'endeavour':
+        return endeavour.get_periods(tariff)
     else:
         raise ValueError(f"Unknown network: {network}")
