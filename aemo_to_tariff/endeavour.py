@@ -1,5 +1,5 @@
 from datetime import time, datetime
-from pytz import timezone
+from zoneinfo import ZoneInfo
 
 
 def time_zone():
@@ -69,7 +69,7 @@ def convert(interval_datetime: datetime, tariff_code: str, rrp: float):
     Returns:
     - float: The price in c/kWh.
     """
-    interval_time = interval_datetime.astimezone(timezone(time_zone())).time()
+    interval_time = interval_datetime.astimezone(ZoneInfo(time_zone())).time()
     rrp_c_kwh = rrp / 10
     tariff = tariffs[tariff_code]
 
