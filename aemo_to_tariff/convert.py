@@ -42,9 +42,9 @@ def spot_to_tariff(interval_time, network, tariff, rrp,
     elif network == 'endeavour':
         return endeavour.convert(interval_time, tariff, adjusted_rrp)
     elif network == 'powercor':
-        return powercor.victoria(interval_time, tariff, adjusted_rrp)
+        return powercor.convert(interval_time, tariff, adjusted_rrp)
     elif network == 'victoria':
-        return endeavour.victoria(interval_time, tariff, adjusted_rrp)
+        return endeavour.convert(interval_time, tariff, adjusted_rrp)
     else:
         raise ValueError(f"Unknown network: {network}")
 

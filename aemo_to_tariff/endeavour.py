@@ -50,6 +50,43 @@ tariffs = {
 }
 
 
+def calculate_daily_fee(tariff_code: str):
+    """
+    Calculate the daily fee for a given tariff.
+
+    Parameters:
+    - tariff_code (str): The tariff code.
+
+    Returns:
+    - float: The daily fee in dollars.
+    """
+    tariff = tariffs.get(tariff_code)
+    if not tariff:
+        raise ValueError(f"Unknown tariff code: {tariff_code}")
+
+    return 39.7300
+
+def calculate_demand_fee(tariff: str, demand_kw: float, days=30):
+    """
+    Calculate the demand fee for a given tariff, demand amount, and time period.
+
+    Parameters:
+    - tariff (str): The tariff code.
+    - demand_kw (float): The maximum demand in kW (or kVA for some tariffs).
+    - days (int): The number of days for the billing period (default is 30).
+
+    Returns:
+    - float: The demand fee in dollars.
+    """
+    tariff = tariffs[tariff]
+
+    # Find the applicable rate
+    for period, start, end, rate in tariff['periods']:
+        if start <= demand_kw < end:
+            return rate * days
+
+    raise ValueError(f"Unknown demand amount: {demand_kw}")
+
 def get_periods(tariff_code: str):
     tariff = tariffs.get(tariff_code)
     if not tariff:
